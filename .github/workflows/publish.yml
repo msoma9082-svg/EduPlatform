@@ -9,6 +9,8 @@ jobs:
         run: Expand-Archive -Path EduPlatform_somee.zip -DestinationPath extracted
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
+      - name: Install .NET 4.6.1
+        run: choco install netfx-4.6.1-devpack -y
       - name: Build
         run: |
           $proj = (Get-ChildItem -Path extracted -Recurse -Filter *.sln | Select-Object -First 1).FullName
