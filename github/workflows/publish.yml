@@ -1,0 +1,21 @@
+name: Build
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unzip
+        run: Expand-Archive -Path EduPlatform_somee.zip -DestinationPath extracted -Force
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+      - name: Build
+        run: |
+          $proj = (Get-ChildItem -Path extracted -Recurse -Filter EduPlatform.csproj | Select-Object -First 1).FullName
+          echo "Found $proj"
+          msbuild "$proj" /p:Configuration=Release
+      - name: Upload bin
+        uses: actions/upload-artifact@v4
+        with:
+          name: publish-bin
+          path: extracted/**/bin/**
