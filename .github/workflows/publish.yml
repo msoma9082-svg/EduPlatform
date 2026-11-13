@@ -12,5 +12,10 @@ jobs:
       - name: Build
         run: |
           $proj = (Get-ChildItem -Path extracted -Recurse -Filter *.sln | Select-Object -First 1).FullName
-          echo "Found $proj"
-          msbuild "$
+          echo Found $proj
+          msbuild $proj /p:Configuration=Release
+      - name: Upload bin
+        uses: actions/upload-artifact@v4
+        with:
+          name: publish-bin
+          path: extracted/**/bin/**
